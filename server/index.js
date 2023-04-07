@@ -9,14 +9,14 @@ const pool = require('./db');
 const bcrypt = require('bcryptjs');
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
-app.use(cors());
+app.use(express.static(path.join(__dirname, '/public')));
+app.use(cors({ credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 
 app.use(
   session({
-    secret: 'secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: new pgSession({ pool, createTableIfMissing: true }),
@@ -30,7 +30,6 @@ app.use(
 );
 
 const isAuth = (req, res, next) => {
-  console.log(req.session.user);
   if (req.session.user) {
     next();
   } else {
@@ -49,7 +48,6 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/alarm', isAuth, (req, res) => {
-  console.log(req.session);
   res.sendFile(__dirname + '/secure/alarm.html');
 });
 
@@ -66,7 +64,7 @@ app.post('/login', async (req, res) => {
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       req.session.user = user;
-      console.log('success');
+      console.log(`successfully logged in user ${user.username}`);
       res.status(200).send({ result: 'redirect', url: '/alarm' });
     } else {
       return res
