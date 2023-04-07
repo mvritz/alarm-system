@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!-- Coding By CodeWithNepal - codewithnepal -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Simple Login Form HTML</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Rubik:400,700"
+    />
+    <link rel="stylesheet" href="../style.css" type="text/css" />
+    <
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="login-form">
+      <form id="form">
+        <h1>Login</h1>
+        <div class="content">
+          <div class="input-field">
+            <input placeholder="Name" name="name" required />
+          </div>
+          <div class="input-field">
+            <input
+              id="password-field"
+              name="password"
+              placeholder="Password"
+              type="password"
+              required
+            />
+          </div>
+        </div>
+        <div class="action">
+          <button type="submit">Sign in</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      const form = document.getElementById('form');
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const formProps = Object.fromEntries(formData);
+        fetch('/login', {
+          method: 'POST',
+          body: JSON.stringify(formProps),
+          mode: 'cors', // no-cors, *cors, same-origin
+          cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+          credentials: 'same-origin', // include, *same-origin, omit
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          redirect: 'follow', // manual, *follow, error
+          referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.result == 'redirect') {
+              window.location.replace(data.url);
+            } else if (data.error) {
+              if (!document.getElementById('error')) {
+                const errorNode = document.createElement('p');
+                errorNode.setAttribute('id', 'error');
+                errorNode.textContent = data.error;
+                errorNode.style = 'background: red;';
+                form.append(errorNode);
+                setTimeout(() => form.removeChild(errorNode), 1000);
+                const passwordField = document.getElementById('password-field');
+                console.log(passwordField);
+                passwordField.value = '';
+              }
+            }
+          });
+      };
+
+      form.addEventListener('submit', handleSubmit);
+    </script>
+  </body>
+</html>

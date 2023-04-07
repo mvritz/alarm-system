@@ -1,5 +1,5 @@
 :root {
-  --light: #d8dbe0;
+  --light: #f35252;
   --dark: #28292c;
   --link: rgb(27, 129, 112);
   --link-hover: rgb(24, 94, 82);
@@ -51,14 +51,14 @@ input:checked ~ .slider {
 }
 
 .slider::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 13px;
   left: 16px;
   width: 75px;
   height: 75px;
   border-radius: 50%;
-  box-shadow: inset 28px -4px 0px 0px var(--light);
+  box-shadow: inset 28px -4px 0px 0px white;
   background-color: var(--dark);
   transition: 0.3s;
 }
@@ -71,7 +71,7 @@ input:checked ~ .slider::before {
 
 a {
   position: relative;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   top: 150px;
   left: 10px;
   font-size: 10px;
