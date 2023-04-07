@@ -1,24 +1,34 @@
-const button = document.querySelector("#checkbox");
-const body = document.querySelector("body");
-const modal = document.querySelector(".modal");
+const button = document.querySelector('#checkbox');
+const body = document.querySelector('body');
 
-button.addEventListener("change", (event) => {
+let timeoutId;
+button.addEventListener('change', (event) => {
   console.log(event);
-  if (event.target.checked) {
-    body.classList.add("alarm");
-    // modal.style.display = "initial";
-  } else {
-    body.classList.remove("alarm");
-    modal.style.display = "none";
-  }
+  if (window.confirm('Are you sure?')) {
+    console.log(event);
+    if (event.target.checked) {
+      body.classList.add('alarm');
+      event.target.disabled = true;
+      timeoutId = setTimeout(() => {
+        event.target.checked = false;
+        event.target.disabled = false;
+      }, 8000);
+    } else {
+      clearTimeout(timeoutId);
+      body.classList.remove('alarm');
+      modal.style.display = 'none';
+    }
 
-  fetch(`/start-alarm`, {
-    method: "post",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      alarm: event.target.checked,
-    }),
-  });
+    fetch(`/start-alarm`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        alarm: event.target.checked,
+      }),
+    });
+  } else {
+    event.target.checked = false;
+  }
 });

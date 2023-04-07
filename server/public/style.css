@@ -5,16 +5,21 @@
   -webkit-font-smoothing: antialiased;
 }
 
+html,
+body {
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
   background: #121212;
   font-family: 'Rubik', sans-serif;
   width: 100vw;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  -webkit-overflow-scrolling: touch;
 }
 
 .login-form {
@@ -30,17 +35,17 @@ body {
   border-radius: 4px;
   box-shadow: 0 2px 25px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(69, 65, 65, 0.434);
+  padding: 2rem;
 }
 .login-form h1 {
   padding: 35px 35px 0 35px;
   font-weight: 300;
 }
 .login-form .content {
-  padding: 35px;
   text-align: center;
 }
 .login-form .input-field {
-  padding: 12px 5px;
+  margin-bottom: 1rem;
 }
 .login-form .input-field input {
   font-size: 16px;
@@ -52,7 +57,7 @@ body {
   border-bottom: 1px solid #747474;
   outline: none;
   -webkit-transition: all 0.2s;
-  transition: all 0.2s;
+  transition: all 0.5s;
 }
 .login-form .input-field input::-webkit-input-placeholder {
   text-transform: uppercase;
@@ -100,7 +105,7 @@ body {
   background: #39faf0;
   color: #ffffff;
   border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 0;
+  border-bottom-right-radius: 4px;
   letter-spacing: 0.2px;
   outline: 0;
   -webkit-transition: all 0.3s;
@@ -113,15 +118,19 @@ body {
 .login-form .action button:nth-child(2) {
   background: #2d3b55;
   color: #fff;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 .login-form .action button:nth-child(2):hover {
   background: #3c4d6d;
 }
 
-@media only screen and (max-width: 768px) {
-  .login-form {
-    width: 80%;
+.logo-container {
+  margin-bottom: 2rem;
+}
+
+@media only screen and (max-width: 780px) {
+  .logo-container img {
+    width: 20rem;
   }
 }

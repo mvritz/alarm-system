@@ -4,6 +4,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Simple Login Form HTML</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Rubik:400,700"
@@ -14,7 +18,9 @@
     <!-- partial:index.partial.html -->
     <div class="login-form">
       <form id="form">
-        <h1>Login</h1>
+        <div class="logo-container">
+          <img src="titanom.svg" />
+        </div>
         <div class="content">
           <div class="input-field">
             <input placeholder="Name" name="name" required />
@@ -59,15 +65,15 @@
               window.location.replace(data.url);
             } else if (data.error) {
               if (!document.getElementById('error')) {
-                const errorNode = document.createElement('p');
-                errorNode.setAttribute('id', 'error');
-                errorNode.textContent = data.error;
-                errorNode.style = 'background: red;';
-                form.append(errorNode);
-                setTimeout(() => form.removeChild(errorNode), 1000);
                 const passwordField = document.getElementById('password-field');
                 console.log(passwordField);
                 passwordField.value = '';
+                passwordField.placeholder = data.error;
+                passwordField.style.background = '#ff5757';
+                setTimeout(() => {
+                  passwordField.style.background = 'revert';
+                  passwordField.placeholder = 'password';
+                }, 1500);
               }
             }
           });

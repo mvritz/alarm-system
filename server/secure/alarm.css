@@ -1,13 +1,20 @@
+html,
+body {
+  height: 100%;
+}
+
 body {
   top: 0;
   left: 0;
   margin: 0;
   padding: 0;
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #28282a;
+  font-family: 'Rubik', sans-serif;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
 }
 
 .switch {
@@ -65,7 +72,7 @@ body {
 }
 
 .switch label .bulb .bulb-center:after {
-  content: "";
+  content: '';
   display: block;
   height: 14px;
   width: 14px;
@@ -96,7 +103,7 @@ body {
 .switch label .bulb .filament-2:after,
 .switch label .bulb .filament-1:before,
 .switch label .bulb .filament-2:before {
-  content: "";
+  content: '';
   display: block;
   height: 6px;
   width: 17px;
@@ -145,7 +152,7 @@ body {
 }
 
 .reflections span:after {
-  content: "";
+  content: '';
   display: block;
   height: 35px;
   width: 20px;
@@ -159,7 +166,7 @@ body {
 }
 
 .reflections:after {
-  content: "";
+  content: '';
   display: block;
   height: 80px;
   width: 50px;
@@ -177,7 +184,7 @@ body {
 }
 
 .reflections:before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   height: 10px;
@@ -299,6 +306,40 @@ body {
 
 .modal {
   display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #222121;
+  color: white;
+  z-index: 100;
+  text-align: center;
+}
+
+.modal .button-container {
+  width: 60rem;
+  display: flex;
+  justify-content: center;
+}
+
+.button-container button {
+  width: 50%;
+  height: 4rem;
+  background-color: #3a3a3c;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border: 1px solid #28282a;
+}
+
+#no-button {
+  color: rgb(225, 87, 87);
+}
+
+#yes-button {
+  color: greenyellow;
 }
 
 @keyframes alarm {
