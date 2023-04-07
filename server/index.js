@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
+const helmet = require('helmet');
 const fs = require('fs');
 const path = require('path');
 const pool = require('./db');
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(cors({ credentials: true }));
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
 const PORT = process.env.PORT || 3000;
 
 app.use(
@@ -31,6 +33,7 @@ app.use(
 
 const isAuth = (req, res, next) => {
   if (req.session.user) {
+    console.log(req);
     next();
   } else {
     res.redirect('/login');
@@ -38,6 +41,7 @@ const isAuth = (req, res, next) => {
 };
 
 app.use('/secure', isAuth, express.static(path.join(__dirname, '/secure')));
+app.use('/start-alarm', isAuth);
 
 app.get('/', isAuth, (req, res) => {
   res.sendFile(__dirname + '/secure/alarm.html');
@@ -57,9 +61,7 @@ app.post('/login', async (req, res) => {
   ]);
   const user = result.rows[0];
   if (user == null) {
-    return res
-      .status(400)
-      .send({ error: "User doesn't exist or password is wrong" });
+    return res.status(400).send({ error: 'Wrong password or username' });
   }
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
@@ -92,27 +94,36 @@ app.post('/login', async (req, res) => {
 //     .catch((err) => res.send(err.message));
 //   res.status(201).send();
 // });
-
+let timeoutId;
 // rpio.open(17, rpio.OUTPUT, rpio.LOW);
-// app.post('/start-alarm', (req, res) => {
-//   // const data = JSON.stringify(req.body);
-//   // fs.writeFile('alarm.json', data, 'utf8', () => {
-//   //   return;
-//   // });
-//   let timeoutId;
+app.post('/start-alarm', isAuth, (req, res) => {
+  const data = JSON.stringify(req.body);
+  // fs.writeFile('alarm.json', data, 'utf8', () => {
+  //   return;
+  // });
 
-//   try {
-//     if (timeoutId) {
-//       clearTimeout(timeoutId);
-//     }
-//     rpio.write(4, rpio.HIGH);
-//     timeoutId = setTimeout(() => rpio.write(4, rpio.LOW), 5000);
-//   } catch (err) {
-//     console.log(err.message);
-//   }
+  if (req.body.alarm) {
+    try {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // rpio.write(4, rpio.HIGH);
+      console.log('turned on');
+      timeoutId = setTimeout(() => {
+        // rpio.write(4, rpio.LOW)
+        console.log('turned off');
+      }, 8000);
+    } catch (err) {
+      console.log(err.message);
+    }
+  } else {
+    clearTimeout(timeoutId);
+    // rpio.write(4, rpio.LOW)
+    console.log('turned off');
+  }
 
-//   res.sendStatus(200);
-// });
+  res.sendStatus(200);
+});
 
 app.get('/*', (req, res) => {
   res.redirect('/login');
