@@ -3,6 +3,7 @@ const body = document.querySelector("body");
 const modal = document.querySelector(".modal");
 
 button.addEventListener("change", (event) => {
+  console.log(event);
   if (event.target.checked) {
     body.classList.add("alarm");
     // modal.style.display = "initial";
@@ -17,7 +18,7 @@ button.addEventListener("change", (event) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      alarm: e.target.checked,
+      alarm: event.target.checked,
     }),
   });
 });
