@@ -5,7 +5,6 @@ const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const fs = require('fs');
 const path = require('path');
-const rpio = require('rpio');
 const pool = require('./db');
 const bcrypt = require('bcryptjs');
 const app = express();
@@ -97,25 +96,25 @@ app.post('/login', async (req, res) => {
 // });
 
 // rpio.open(17, rpio.OUTPUT, rpio.LOW);
-app.post('/start-alarm', (req, res) => {
-  // const data = JSON.stringify(req.body);
-  // fs.writeFile('alarm.json', data, 'utf8', () => {
-  //   return;
-  // });
-  let timeoutId;
+// app.post('/start-alarm', (req, res) => {
+//   // const data = JSON.stringify(req.body);
+//   // fs.writeFile('alarm.json', data, 'utf8', () => {
+//   //   return;
+//   // });
+//   let timeoutId;
 
-  try {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    rpio.write(4, rpio.HIGH);
-    timeoutId = setTimeout(() => rpio.write(4, rpio.LOW), 5000);
-  } catch (err) {
-    console.log(err.message);
-  }
+//   try {
+//     if (timeoutId) {
+//       clearTimeout(timeoutId);
+//     }
+//     rpio.write(4, rpio.HIGH);
+//     timeoutId = setTimeout(() => rpio.write(4, rpio.LOW), 5000);
+//   } catch (err) {
+//     console.log(err.message);
+//   }
 
-  res.sendStatus(200);
-});
+//   res.sendStatus(200);
+// });
 
 app.get('/*', (req, res) => {
   res.redirect('/login');

@@ -11,7 +11,6 @@ specifiers:
   nodemon: ^2.0.22
   onoff: ^6.0.3
   pg: ^8.10.0
-  rpio: ^2.4.2
   stylus: ^0.59.0
 
 dependencies:
@@ -23,7 +22,6 @@ dependencies:
   express-session: 1.17.3
   onoff: 6.0.3
   pg: 8.10.0
-  rpio: 2.4.2
   stylus: 0.59.0
 
 devDependencies:
@@ -792,15 +790,6 @@ packages:
     dependencies:
       picomatch: 2.3.1
     dev: true
-
-  /rpio/2.4.2:
-    resolution: {integrity: sha512-SiWw2VorgUh+0hbu6eJkRGG+luvS9BboXz6PQl8Z49kJ+8Nn7R/b4ohybLIYSMbQqcW1WYqSooadDuv1VOAiFw==}
-    engines: {node: '>=0.8'}
-    requiresBuild: true
-    dependencies:
-      bindings: 1.5.0
-      nan: 2.17.0
-    dev: false
 
   /safe-buffer/5.2.1:
     resolution: {integrity: sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==}
