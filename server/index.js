@@ -1,30 +1,30 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-const fs = require('fs');
-const path = require('path');
-const rpio = require('rpio');
-const pool = require('./db');
-const bcrypt = require('bcryptjs');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const fs = require("fs");
+const path = require("path");
+const rpio = require("rpio");
+const pool = require("./db");
+const bcrypt = require("bcryptjs");
 const app = express();
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static("public"));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 
 app.use(
   session({
-    secret: 'secret',
+    secret: "secret",
     resave: false,
     saveUninitialized: false,
     store: new pgSession({ pool, createTableIfMissing: true }),
     cookie: {
       secure: false,
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 1000 * 60 * 60 * 12,
     },
   })
@@ -35,27 +35,27 @@ const isAuth = (req, res, next) => {
   if (req.session.user) {
     next();
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 };
 
-app.use('/secure', isAuth, express.static(path.join(__dirname, 'secure')));
+app.use("/secure", isAuth, express.static(path.join(__dirname, "secure")));
 
-app.get('/', isAuth, (req, res) => {
-  res.sendFile(__dirname + '/secure/alarm.html');
+app.get("/", isAuth, (req, res) => {
+  res.sendFile(__dirname + "/secure/alarm.html");
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(__dirname + '/public/login.html');
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/public/login.html");
 });
 
-app.get('/alarm', isAuth, (req, res) => {
+app.get("/alarm", isAuth, (req, res) => {
   console.log(req.session);
-  res.sendFile(__dirname + '/secure/alarm.html');
+  res.sendFile(__dirname + "/secure/alarm.html");
 });
 
-app.post('/login', async (req, res) => {
-  const result = await pool.query('SELECT * FROM accounts WHERE username=$1', [
+app.post("/login", async (req, res) => {
+  const result = await pool.query("SELECT * FROM accounts WHERE username=$1", [
     req.body.name,
   ]);
   const user = result.rows[0];
@@ -67,8 +67,8 @@ app.post('/login', async (req, res) => {
   try {
     if (await bcrypt.compare(req.body.password, user.password)) {
       req.session.user = user;
-      console.log('success');
-      res.status(200).send({ result: 'redirect', url: '/alarm' });
+      console.log("success");
+      res.status(200).send({ result: "redirect", url: "/alarm" });
     } else {
       return res
         .status(400)
@@ -97,7 +97,7 @@ app.post('/login', async (req, res) => {
 // });
 
 // rpio.open(17, rpio.OUTPUT, rpio.LOW);
-app.post('/start-alarm', (req, res) => {
+app.post("/start-alarm", (req, res) => {
   // const data = JSON.stringify(req.body);
   // fs.writeFile('alarm.json', data, 'utf8', () => {
   //   return;
@@ -117,10 +117,10 @@ app.post('/start-alarm', (req, res) => {
   res.sendStatus(200);
 });
 
-app.get('/*', (req, res) => {
-  res.redirect('/login');
+app.get("/*", (req, res) => {
+  res.redirect("/login");
 });
 
 app.listen(PORT, () => {
-  console.log('listening on port ' + PORT);
+  console.log("listening on port " + PORT);
 });

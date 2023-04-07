@@ -248,7 +248,6 @@ body {
   background-color: #8f331c;
   box-shadow: inset 0 0 1px 3px #5f1f0f, inset 0 0 6px 8px #4f2a34,
     0 20px 30px -10px rgba(0, 0, 0, 0.4), 0 0 30px 50px rgba(253, 184, 67, 0.1);
-  animation: alarm 2s ease-in-out infinite;
 }
 
 .switch input:checked ~ label .bulb > .bulb-center {
