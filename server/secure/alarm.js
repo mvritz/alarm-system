@@ -5,7 +5,7 @@ const modal = document.querySelector(".modal");
 button.addEventListener("change", (event) => {
   if (event.target.checked) {
     body.classList.add("alarm");
-    modal.style.display = "initial";
+    // modal.style.display = "initial";
   } else {
     body.classList.remove("alarm");
     modal.style.display = "none";
