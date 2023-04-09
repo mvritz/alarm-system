@@ -2,135 +2,183 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-}
-
-html,
-body {
-  height: 100%;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background: #121212;
-  font-family: 'Rubik', sans-serif;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-overflow-scrolling: touch;
+  background-color: #28282a;
 }
 
 .login-form {
-  background: #222121;
-  color: white;
+  background: #fdfdfd;
   width: 35rem;
-  margin: 65px 0;
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  flex-direction: column;
-  border-radius: 4px;
-  box-shadow: 0 2px 25px rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(69, 65, 65, 0.434);
-  padding: 2rem;
-}
-.login-form h1 {
-  padding: 35px 35px 0 35px;
-  font-weight: 300;
-}
-.login-form .content {
-  text-align: center;
-}
-.login-form .input-field {
-  margin-bottom: 1rem;
-}
-.login-form .input-field input {
-  font-size: 16px;
-  display: block;
-  font-family: 'Rubik', sans-serif;
-  width: 100%;
-  padding: 10px 5px;
-  border: 0;
-  border-bottom: 1px solid #747474;
-  outline: none;
-  -webkit-transition: all 0.2s;
-  transition: all 0.5s;
-}
-.login-form .input-field input::-webkit-input-placeholder {
-  text-transform: uppercase;
-}
-.login-form .input-field input::-moz-placeholder {
-  text-transform: uppercase;
-}
-.login-form .input-field input:-ms-input-placeholder {
-  text-transform: uppercase;
-}
-.login-form .input-field input::-ms-input-placeholder {
-  text-transform: uppercase;
-}
-.login-form .input-field input::placeholder {
-  text-transform: uppercase;
-}
-.login-form .input-field input:focus {
-  border-color: #222;
-}
-.login-form a.link {
-  text-decoration: none;
-  color: #747474;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-  display: inline-block;
-  margin-top: 20px;
-}
-.login-form .action {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  flex-direction: row;
-}
-.login-form .action button,
-.login-form .action a {
-  width: 100%;
-  border: none;
-  padding: 18px;
-  font-family: 'Rubik', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 400;
-  cursor: pointer;
-  text-transform: uppercase;
-  background: #39faf0;
-  color: #ffffff;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  letter-spacing: 0.2px;
-  outline: 0;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-}
-.login-form .action button:hover {
-  background: #39faf0;
-  filter: grayscale(60%);
-}
-.login-form .action button:nth-child(2) {
-  background: #2d3b55;
-  color: #fff;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-}
-.login-form .action button:nth-child(2):hover {
-  background: #3c4d6d;
+  margin: 5rem auto;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
 .logo-container {
-  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin-top: 2rem;
 }
 
-@media only screen and (max-width: 780px) {
-  .logo-container img {
-    width: 20rem;
+.logo-container img {
+  max-width: 100%;
+  height: auto;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.input-field {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.input-field input {
+  font-size: 1.2rem;
+  font-family: "Rubik", sans-serif;
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #e2e2e2;
+  border-radius: 4px;
+  outline: none;
+  background: #f8f8f8;
+  transition: border-color 0.2s ease-out;
+}
+
+.input-field input:focus {
+  border-color: #f90284;
+}
+
+.input-field input:not(:placeholder-shown) + label {
+  transform: translateY(-1.5rem) scale(0.8);
+  color: #f90284;
+}
+
+.input-field label {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  color: #777;
+  font-size: 1.2rem;
+  font-weight: 500;
+  transform-origin: left bottom;
+  transition: transform 0.2s ease-out, color 0.2s ease-out;
+}
+
+.input-field input:focus + label {
+  transform: translateY(-2.5rem) scale(0.8);
+  color: #f90284;
+}
+
+.input-field input:focus {
+  border-color: #f90284;
+  transition: border-color 0.3s ease-out;
+}
+
+.input-field input:not(:focus) {
+  border-color: #e2e2e2;
+  transition: border-color 0.3s ease-out;
+}
+
+.input-field input:focus {
+  background-color: #f8f8f8;
+  transition: background-color 0.3s ease-out;
+}
+
+.input-field input:not(:focus) {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease-out;
+}
+
+.wrap {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  margin-bottom: 2rem;
+  min-width: 300px;
+  min-height: 60px;
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  font-weight: 700;
+  color: #fdfdfd;
+  background: #f90284;
+  border: none;
+  border-radius: 1000px;
+  box-shadow: 12px 12px 24px rgba(249, 2, 132, 0.64);
+  transition: all 0.3s ease-in-out 0s;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  padding: 10px;
+}
+
+button::before {
+  content: "";
+  border-radius: 1000px;
+  min-width: calc(300px + 12px);
+  min-height: calc(60px + 12px);
+  border: 6px solid #f90284;
+  box-shadow: 0 0 60px rgba(249, 2, 132, 0.64);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.button:hover,
+.button:focus {
+  color: #fdfdfd;
+  transform: translateY(-6px);
+}
+
+button:hover::before,
+button:focus::before {
+  opacity: 1;
+}
+
+button::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 6px solid #f90284;
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ring 1.5s infinite;
+}
+
+button:hover::after,
+button:focus::after {
+  animation: none;
+  display: none;
+}
+
+@keyframes ring {
+  0% {
+    width: 30px;
+    height: 30px;
+    opacity: 1;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
   }
 }
