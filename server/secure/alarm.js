@@ -57,7 +57,7 @@ button.addEventListener('change', (event) => {
 
 function applyRunningStyles() {
   button.checked = true;
-  button.disabled = true;
+  // button.disabled = true;
   body.classList.add('alarm');
   // timer.style.display = 'initial';
 }
