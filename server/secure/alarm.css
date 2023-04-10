@@ -342,6 +342,10 @@ body {
   color: greenyellow;
 }
 
+.alarm {
+  animation: alarm 1s infinite;
+}
+
 @keyframes alarm {
   0% {
     background-color: #8f331c;

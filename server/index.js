@@ -3,17 +3,19 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
-const helmet = require('helmet');
 const fs = require('fs');
 const path = require('path');
 const pool = require('./db');
 const bcrypt = require('bcryptjs');
+const http = require('http');
 const app = express();
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(cors({ credentials: true }));
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
 const PORT = process.env.PORT || 3000;
 
 app.use(
@@ -33,7 +35,6 @@ app.use(
 
 const isAuth = (req, res, next) => {
   if (req.session.user) {
-    console.log(req);
     next();
   } else {
     res.redirect('/login');
@@ -41,7 +42,6 @@ const isAuth = (req, res, next) => {
 };
 
 app.use('/secure', isAuth, express.static(path.join(__dirname, '/secure')));
-app.use('/start-alarm', isAuth);
 
 app.get('/', isAuth, (req, res) => {
   res.sendFile(__dirname + '/secure/alarm.html');
@@ -95,6 +95,7 @@ app.post('/login', async (req, res) => {
 //   res.status(201).send();
 // });
 let timeoutId;
+let isAlarm = false;
 // rpio.open(17, rpio.OUTPUT, rpio.LOW);
 app.post('/start-alarm', isAuth, (req, res) => {
   const data = JSON.stringify(req.body);
@@ -109,9 +110,13 @@ app.post('/start-alarm', isAuth, (req, res) => {
       }
       // rpio.write(4, rpio.HIGH);
       console.log('turned on');
+      io.emit('turnedOn');
+      isAlarm = true;
       timeoutId = setTimeout(() => {
         // rpio.write(4, rpio.LOW)
         console.log('turned off');
+        io.emit('turnedOff');
+        isAlarm = false;
       }, 8000);
     } catch (err) {
       console.log(err.message);
@@ -129,6 +134,11 @@ app.get('/*', (req, res) => {
   res.redirect('/login');
 });
 
-app.listen(PORT, () => {
+io.on('connection', (socket) => {
+  console.log('connected');
+  socket.emit('init', { isAlarm });
+});
+
+server.listen(PORT, () => {
   console.log('listening on port ' + PORT);
 });
