@@ -413,6 +413,43 @@ body {
   margin-right: 1rem;
 }
 
+@media (max-width: 767px) {
+  .modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90vw;
+    padding: 1.5rem;
+    border-radius: 0.8rem;
+    color: #fff;
+    background-color: #1c1c1c;
+    box-shadow: 0.4rem 0.4rem 2.4rem 0.2rem hsla(319, 100%, 54%, 0.3);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .modal-content h2 {
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .modal-buttons {
+    margin-top: 1.5rem;
+  }
+
+  .cancel-btn,
+  .ok-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+  }
+
+  .cancel-btn {
+    margin-right: 0.5rem;
+  }
+}
+
 @-moz-keyframes spark1 {
   0% {
     right: -5px;
