@@ -9,16 +9,26 @@
   <script src="secure/alarm.js" defer></script>
 </head>
 <body>
+  <div class="timer">
+    <span id="minutes">00</span>:<span id="seconds">00</span>
+  </div>
   <div class="switch">
     <input type="checkbox" name="toggle" id="checkbox" />
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Are you really sure you want to execute the alarm?</h2>
+        <div class="modal-buttons">
+          <button class="cancel-btn">Cancel</button>
+          <button class="ok-btn">OK</button>
+        </div>
+      </div>
+    </div>
     <label for="toggle">
       <i class="bulb">
         <span class="bulb-center"></span>
         <span class="filament-1"></span>
         <span class="filament-2"></span>
-        <span class="reflections">
-          <span></span>
-        </span>
+        <span class="reflections"> </span>
         <span class="sparks">
           <i class="spark1"></i>
           <i class="spark2"></i>

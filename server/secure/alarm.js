@@ -1,61 +1,72 @@
 const button = document.querySelector("#checkbox");
 const body = document.querySelector("body");
 const modal = document.querySelector(".modal");
+const cancelBtn = document.querySelector(".cancel-btn");
+const okBtn = document.querySelector(".ok-btn");
+const timer = document.querySelector(".timer");
 
-const socket = io();
+function delay(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
 
-window.onload = () => {
-  button.disabled = true;
-};
+function showModal() {
+  modal.style.display = "initial";
+}
 
-let timeoutId;
+function hideModal() {
+  modal.style.display = "none";
+}
+
+cancelBtn.addEventListener("click", () => {
+  hideModal();
+  button.classList.remove("checked");
+});
+
+okBtn.addEventListener("click", (event) => {
+  hideModal();
+  delay(10000).then(() => {
+    button.classList.add("checked");
+  });
+  fetch(`/start-alarm`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      alarm: event.target.checked,
+    }),
+  });
+  timer.style.display = "initial";
+});
+
 button.addEventListener("change", (event) => {
-  console.log(event);
-  if (window.confirm("Are you sure?")) {
-    fetch(`/start-alarm`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        alarm: event.target.checked,
-      }),
-    });
+  if (event.target.checked) {
+    showModal();
+    button.classList.remove("checked");
   } else {
-    button.checked = false;
+    hideModal();
+    timer.style.display = "none";
+  }
+});
+
+timer.style.display = "none";
+let minutes = 0;
+let seconds = 0;
+
+const minutesEl = document.getElementById("minutes");
+const secondsEl = document.getElementById("seconds");
+
+setInterval(() => {
+  seconds++;
+
+  if (seconds === 60) {
+    seconds = 0;
+    minutes++;
   }
 
-  //   fetch(`/start-alarm`, {
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       alarm: event.target.checked,
-  //     }),
-  //   });
-});
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
 
-function applyRunningStyles() {
-  button.checked = true;
-  button.disabled = true;
-  body.classList.add("alarm");
-}
-
-function applyStoppedStyles() {
-  button.checked = false;
-  button.disabled = false;
-  body.classList.remove("alarm");
-}
-
-socket.on("init", ({ isAlarm }) => {
-  isAlarm ? applyRunningStyles() : applyStoppedStyles();
-});
-
-socket.on("turnedOn", () => {
-  applyRunningStyles();
-});
-
-socket.on("turnedOff", () => {
-  applyStoppedStyles();
-});
+  minutesEl.textContent = formattedMinutes;
+  secondsEl.textContent = formattedSeconds;
+}, 1000);
