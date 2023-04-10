@@ -12,9 +12,13 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #28282a;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
+}
+
+body.alarm {
+  animation: alarm 0.5s ease-in-out infinite alternate;
 }
 
 .switch {
@@ -72,7 +76,7 @@ body {
 }
 
 .switch label .bulb .bulb-center:after {
-  content: '';
+  content: "";
   display: block;
   height: 14px;
   width: 14px;
@@ -103,7 +107,7 @@ body {
 .switch label .bulb .filament-2:after,
 .switch label .bulb .filament-1:before,
 .switch label .bulb .filament-2:before {
-  content: '';
+  content: "";
   display: block;
   height: 6px;
   width: 17px;
@@ -152,7 +156,7 @@ body {
 }
 
 .reflections span:after {
-  content: '';
+  content: "";
   display: block;
   height: 35px;
   width: 20px;
@@ -166,7 +170,7 @@ body {
 }
 
 .reflections:after {
-  content: '';
+  content: "";
   display: block;
   height: 80px;
   width: 50px;
@@ -184,7 +188,7 @@ body {
 }
 
 .reflections:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   height: 10px;
@@ -340,24 +344,6 @@ body {
 
 #yes-button {
   color: greenyellow;
-}
-
-@keyframes alarm {
-  0% {
-    background-color: #8f331c;
-  }
-  25% {
-    background-color: #ba3716;
-  }
-  50% {
-    background-color: #ff0000;
-  }
-  75% {
-    background-color: #ba3716;
-  }
-  100% {
-    background-color: #8f331c;
-  }
 }
 
 @-moz-keyframes spark1 {
@@ -685,5 +671,41 @@ body {
     opacity: 0;
     height: 3px;
     width: 3px;
+  }
+}
+
+@keyframes alarm {
+  0% {
+    background-color: #28282a;
+  }
+  10% {
+    background-color: #330000;
+  }
+  20% {
+    background-color: #660000;
+  }
+  30% {
+    background-color: #990000;
+  }
+  40% {
+    background-color: #cc0000;
+  }
+  50% {
+    background-color: #ff0000;
+  }
+  60% {
+    background-color: #cc0000;
+  }
+  70% {
+    background-color: #990000;
+  }
+  80% {
+    background-color: #660000;
+  }
+  90% {
+    background-color: #330000;
+  }
+  100% {
+    background-color: #28282a;
   }
 }
