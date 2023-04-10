@@ -110,12 +110,12 @@ app.post('/start-alarm', isAuth, (req, res) => {
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
-      // rpio.write(4, rpio.HIGH);
+      shell.exec('./start-alarm.sh');
       console.log('turned on');
       io.emit('turnedOn');
       isAlarm = true;
       timeoutId = setTimeout(() => {
-        // rpio.write(4, rpio.LOW)
+        shell.exec('./stop-alarm.sh');
         console.log('turned off');
         io.emit('turnedOff');
         isAlarm = false;
@@ -139,7 +139,6 @@ app.get('/*', (req, res) => {
 io.on('connection', (socket) => {
   console.log('connected');
   socket.emit('init', { isAlarm });
-  shell.exec('./start-alarm.sh');
 });
 
 server.listen(PORT, () => {
