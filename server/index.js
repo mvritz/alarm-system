@@ -11,6 +11,8 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
+const { exec } = require('child_process');
+const shell = require('shelljs');
 const io = new Server(server);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
@@ -137,6 +139,7 @@ app.get('/*', (req, res) => {
 io.on('connection', (socket) => {
   console.log('connected');
   socket.emit('init', { isAlarm });
+  shell.exec('./start-alarm.sh');
 });
 
 server.listen(PORT, () => {
