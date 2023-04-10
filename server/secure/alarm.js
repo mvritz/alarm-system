@@ -2,13 +2,27 @@ const button = document.querySelector("#checkbox");
 const body = document.querySelector("body");
 const modal = document.querySelector(".modal");
 
+const socket = io();
+
+window.onload = () => {
+  button.disabled = true;
+};
+
+let timeoutId;
 button.addEventListener("change", (event) => {
-  if (event.target.checked) {
-    body.classList.add("alarm");
-    // modal.style.display = "initial";
-    modal.style.display = "none";
+  console.log(event);
+  if (window.confirm("Are you sure?")) {
+    fetch(`/start-alarm`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        alarm: event.target.checked,
+      }),
+    });
   } else {
-    body.classList.remove("alarm");
+    button.checked = false;
   }
 
   //   fetch(`/start-alarm`, {
@@ -20,4 +34,28 @@ button.addEventListener("change", (event) => {
   //       alarm: event.target.checked,
   //     }),
   //   });
+});
+
+function applyRunningStyles() {
+  button.checked = true;
+  button.disabled = true;
+  body.classList.add("alarm");
+}
+
+function applyStoppedStyles() {
+  button.checked = false;
+  button.disabled = false;
+  body.classList.remove("alarm");
+}
+
+socket.on("init", ({ isAlarm }) => {
+  isAlarm ? applyRunningStyles() : applyStoppedStyles();
+});
+
+socket.on("turnedOn", () => {
+  applyRunningStyles();
+});
+
+socket.on("turnedOff", () => {
+  applyStoppedStyles();
 });

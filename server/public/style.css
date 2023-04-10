@@ -10,7 +10,7 @@ body {
 
 .login-form {
   background: #fdfdfd;
-  width: 35rem;
+  max-width: 35rem;
   margin: 5rem auto;
   border-radius: 1rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
@@ -28,6 +28,7 @@ body {
 .logo-container img {
   max-width: 100%;
   height: auto;
+  filter: contrast(0.8);
 }
 
 .content {
@@ -41,7 +42,7 @@ body {
 
 .input-field input {
   font-size: 1.2rem;
-  font-family: "Rubik", sans-serif;
+  font-family: 'Rubik', sans-serif;
   width: 100%;
   padding: 1rem;
   border: 2px solid #e2e2e2;
@@ -107,7 +108,7 @@ body {
   margin-bottom: 2rem;
   min-width: 300px;
   min-height: 60px;
-  font-family: "Nunito", sans-serif;
+  font-family: 'Nunito', sans-serif;
   font-size: 22px;
   text-transform: uppercase;
   letter-spacing: 1.3px;
@@ -125,7 +126,7 @@ body {
 }
 
 button::before {
-  content: "";
+  content: '';
   border-radius: 1000px;
   min-width: calc(300px + 12px);
   min-height: calc(60px + 12px);
@@ -151,7 +152,7 @@ button:focus::before {
 }
 
 button::after {
-  content: "";
+  content: '';
   width: 30px;
   height: 30px;
   border-radius: 100%;
