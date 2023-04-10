@@ -19,13 +19,13 @@ function hideModal() {
 
 cancelBtn.addEventListener("click", () => {
   hideModal();
-  button.classList.remove("checked");
+  button.checked = false;
 });
 
 okBtn.addEventListener("click", (event) => {
   hideModal();
-  delay(10000).then(() => {
-    button.classList.add("checked");
+  delay(1000).then(() => {
+    button.checked = true;
   });
   fetch(`/start-alarm`, {
     method: "post",
