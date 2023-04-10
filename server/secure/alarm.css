@@ -348,19 +348,15 @@ body {
 
 @keyframes alarm {
   0% {
-    background-color: #8f331c;
+    background-color: #000000;
   }
-  25% {
-    background-color: #ba3716;
-  }
+
   50% {
-    background-color: #ff0000;
+    background-color: #d0342c;
   }
-  75% {
-    background-color: #ba3716;
-  }
+
   100% {
-    background-color: #8f331c;
+    background-color: #000000;
   }
 }
 
