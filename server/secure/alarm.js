@@ -14,7 +14,6 @@ let seconds = 0;
 const socket = io();
 
 window.onload = () => {
-  button.disabled = true;
   timer.style.display = 'none';
 };
 
@@ -28,6 +27,22 @@ function showModal() {
 
 function hideModal() {
   modal.style.display = 'none';
+}
+
+function applyRunningStyles() {
+  button.checked = true;
+  body.classList.add('alarm');
+  timer.style.display = 'initial';
+}
+
+function applyStoppedStyles() {
+  button.checked = false;
+  button.disabled = false;
+  body.classList.remove('alarm');
+  hideModal();
+  timer.style.display = 'none';
+  minutes = 0;
+  seconds = 0;
 }
 
 cancelBtn.addEventListener('click', () => {
@@ -51,26 +66,19 @@ okBtn.addEventListener('click', (event) => {
 button.addEventListener('change', (event) => {
   if (event.target.checked) {
     showModal();
+  } else {
+    fetch(`/start-alarm`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        alarm: false,
+      }),
+    });
   }
   button.checked = false;
 });
-
-function applyRunningStyles() {
-  button.checked = true;
-  // button.disabled = true;
-  body.classList.add('alarm');
-  // timer.style.display = 'initial';
-}
-
-function applyStoppedStyles() {
-  button.checked = false;
-  button.disabled = false;
-  body.classList.remove('alarm');
-  hideModal();
-  timer.style.display = 'none';
-  minutes = 0;
-  seconds = 0;
-}
 
 socket.on('init', ({ isAlarm }) => {
   isAlarm ? applyRunningStyles() : applyStoppedStyles();
@@ -83,4 +91,11 @@ socket.on('turnedOn', () => {
 socket.on('turnedOff', () => {
   console.log('off');
   applyStoppedStyles();
+});
+
+socket.on('tick', (duration) => {
+  const formattedSeconds = Math.floor(duration / 1000)
+    .toString()
+    .padStart(2, '0');
+  secondsEl.textContent = formattedSeconds;
 });
