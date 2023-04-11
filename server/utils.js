@@ -27,7 +27,6 @@ function isAuth(req, res, next) {
 }
 
 function isAdmin(req, res, next) {
-  console.log(req.session.user);
   if (req.session.user.username === 'admin') {
     next();
   } else {
