@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
-const fs = require('fs');
 const path = require('path');
 const pool = require('./db');
 const bcrypt = require('bcryptjs');
@@ -11,14 +10,13 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const { exec } = require('child_process');
-const shell = require('shelljs');
-const io = new Server(server);
+const { startAlarm, stopAlarm, isAuth, isAdmin, alarm } = require('./utils');
+const { DURATION, PORT } = require('./constants');
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(cors({ credentials: true }));
 app.use(express.urlencoded({ extended: true }));
-const PORT = process.env.PORT || 3000;
+const io = new Server(server);
 
 app.use(
   session({
@@ -35,15 +33,26 @@ app.use(
   })
 );
 
-const isAuth = (req, res, next) => {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
-};
-
 app.use('/secure', isAuth, express.static(path.join(__dirname, '/secure')));
+
+let timeoutId;
+let intervalId;
+let currentDuration = DURATION;
+
+function handleTick() {
+  io.emit('tick', currentDuration);
+  currentDuration -= 1000;
+}
+
+function reset() {
+  if (timeoutId) {
+    clearTimeout(timeoutId);
+  }
+  if (intervalId) {
+    clearInterval(intervalId);
+    currentDuration = DURATION;
+  }
+}
 
 app.get('/', isAuth, (req, res) => {
   res.sendFile(__dirname + '/secure/alarm.html');
@@ -51,6 +60,10 @@ app.get('/', isAuth, (req, res) => {
 
 app.get('/login', (req, res) => {
   res.sendFile(__dirname + '/public/login.html');
+});
+
+app.get('/register', isAuth, isAdmin, (req, res) => {
+  res.sendFile(__dirname + '/secure/register.html');
 });
 
 app.get('/alarm', isAuth, (req, res) => {
@@ -80,53 +93,47 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// app.post('/users/register', async (req, res) => {
-//   console.log(req.body);
-//   const user = { name: req.body.name, password: req.body.password };
-//   const salt = await bcrypt.genSalt();
-//   user.password = await bcrypt.hash(user.password, salt);
-//   await pool
-//     .query(
-//       'INSERT INTO accounts(username,password) VALUES($1,$2) RETURNING user_id;',
-//       [user.name, user.password]
-//     )
-//     .then((result) => {
-//       res.json(result.rows[0]);
-//     })
-//     .catch((err) => res.send(err.message));
-//   res.status(201).send();
-// });
-let timeoutId;
-let isAlarm = false;
-// rpio.open(17, rpio.OUTPUT, rpio.LOW);
-app.post('/start-alarm', isAuth, (req, res) => {
-  const data = JSON.stringify(req.body);
-  // fs.writeFile('alarm.json', data, 'utf8', () => {
-  //   return;
-  // });
+app.post('/register', isAuth, isAdmin, async (req, res) => {
+  console.log(req.body);
+  const user = { name: req.body.name, password: req.body.password };
+  const salt = await bcrypt.genSalt();
+  user.password = await bcrypt.hash(user.password, salt);
+  await pool
+    .query(
+      'INSERT INTO accounts(username,password) VALUES($1,$2) RETURNING user_id;',
+      [user.name, user.password]
+    )
+    .then((result) => {
+      res.redirect('/login');
+    })
+    .catch((err) => res.send(err.message));
+  res.status(201).send();
+});
 
+app.post('/start-alarm', isAuth, async (req, res) => {
   if (req.body.alarm) {
+    const result = await pool.query(
+      'SELECT user_id FROM accounts WHERE username = $1;',
+      [req.session.user.username]
+    );
+    const userId = result.rows[0].user_id;
+    console.log(typeof userId, userId);
+    reset();
     try {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      shell.exec('./start-alarm.sh');
-      console.log('turned on');
-      io.emit('turnedOn');
-      isAlarm = true;
-      timeoutId = setTimeout(() => {
-        shell.exec('./stop-alarm.sh');
-        console.log('turned off');
-        io.emit('turnedOff');
-        isAlarm = false;
-      }, 8000);
+      startAlarm(io);
+      timeoutId = setTimeout(() => stopAlarm(io), DURATION);
+      await pool.query('INSERT INTO alarmexecutions(user_id) VALUES($1)', [
+        Number(userId),
+      ]);
+
+      handleTick();
+      intervalId = setInterval(handleTick, 1000);
     } catch (err) {
       console.log(err.message);
     }
   } else {
-    clearTimeout(timeoutId);
-    // rpio.write(4, rpio.LOW)
-    console.log('turned off');
+    reset();
+    stopAlarm(io);
   }
 
   res.sendStatus(200);
@@ -137,8 +144,7 @@ app.get('/*', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-  console.log('connected');
-  socket.emit('init', { isAlarm });
+  socket.emit('init', { isAlarm: alarm.running });
 });
 
 server.listen(PORT, () => {
