@@ -17,6 +17,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(cors({ credentials: true }));
 app.use(express.urlencoded({ extended: true }));
 const io = new Server(server);
+const fetch = require("node-fetch");
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -111,20 +113,20 @@ app.post('/register', isAuth, isAdmin, async (req, res) => {
 
 app.post('/start-alarm', isAuth, async (req, res) => {
   if (req.body.alarm) {
-//    const result = await pool.query(
- //     'SELECT user_id FROM accounts WHERE username = $1;',
-  //    [req.session.user.username]
-   // );
-   // const userId = result.rows[0].user_id;
-    //console.log(typeof userId, userId);
+    const result = await pool.query(
+      'SELECT user_id FROM accounts WHERE username = $1;',
+      [req.session.user.username]
+    );
+    const userId = result.rows[0].user_id;
     reset();
     try {
 console.log('try')
       startAlarm(io);
       timeoutId = setTimeout(() => stopAlarm(io), DURATION);
-//      await pool.query('INSERT INTO alarmexecutions(user_id) VALUES($1)', [
- //       Number(userId),
-  //    ]);
+      await fetch("http://localhost:5005/pauseall")
+      await pool.query('INSERT INTO alarmexecutions(user_id) VALUES($1)', [
+       Number(userId),
+    ]);
 
       handleTick();
       intervalId = setInterval(handleTick, 1000);
