@@ -5,14 +5,14 @@ let alarm = {
 };
 
 function startAlarm(io) {
-  shell.exec('./start-alarm.sh');
+  shell.exec('./start-alarm.sh',{async:true});
   io.emit('turnedOn');
   alarm.running = true;
   console.log('turned on');
 }
 
 function stopAlarm(io) {
-  shell.exec('./stop-alarm.sh');
+  shell.exec('./stop-alarm.sh',{async:true});
   io.emit('turnedOff');
   alarm.running = false;
   console.log('turned off');
